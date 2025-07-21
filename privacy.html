@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolli di Sicurezza - Spectre</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root { --background-color: #0d0d0d; --text-color: #e0e0e0; --primary-color: #00ffab; }
+        body { background-color: var(--background-color); color: var(--text-color); font-family: 'Share Tech Mono', monospace; line-height: 1.8; padding: 30px; }
+        .container { max-width: 800px; margin: auto; border: 1px solid #333; padding: 20px 40px; }
+        h1, h2 { color: var(--primary-color); border-bottom: 1px solid #333; padding-bottom: 10px; }
+        code { background: #222; padding: 2px 6px; color: var(--primary-color); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>[ PROTOCOLLI DI SICUREZZA - SPECTRE ]</h1>
+        <p><strong>Classificazione:</strong> TOP SECRET</p>
+        <p><strong>Documento aggiornato a:</strong> 19/07/2025</p>
+
+        <h2>PRINCIPIO DI VOLATILITÀ</h2>
+        <p>
+            Questo sistema opera secondo il principio di volatilità totale. Nessun dato viene conservato in modo permanente.
+        </p>
+
+        <h2>LOG DI CONNESSIONE</h2>
+        <ul>
+            <li><strong>Canali:</strong> I canali di comunicazione sono creati dinamicamente quando il primo operatore si connette e vengono distrutti non appena l'ultimo operatore si disconnette. Nessuna cronologia dei canali viene mantenuta.</li>
+            <li><strong>Messaggi:</strong> I messaggi transitano attraverso il server ma non vengono mai scritti su disco. Sono conservati solo nella memoria volatile del server il tempo strettamente necessario per la ritrasmissione agli altri operatori presenti nel canale. Ogni messaggio è programmato per autodistruggersi dal client dopo 15 secondi.</li>
+            <li><strong>Identità:</strong> L'identità degli operatori è protetta tramite codename generati casualmente per ogni sessione. Nessun account, email o numero di telefono è richiesto o memorizzato.</li>
+        </ul>
+
+        <h2>TRACCIAMENTO E COOKIE</h2>
+        <p>
+            Il sistema <strong>non utilizza cookie</strong> di tracciamento o profilazione. L'unica informazione salvata localmente sul dispositivo dell'operatore (tramite <code>localStorage</code>) è un flag che indica la lettura di questo protocollo, per non mostrarlo ripetutamente.
+        </p>
+
+        <h2>DISCLAIMER OPERATIVO</h2>
+        <p>
+            Questo sistema è un prototipo dimostrativo. L'utente è responsabile dell'uso che ne fa. Si sconsiglia l'utilizzo per la trasmissione di informazioni la cui compromissione potrebbe causare danni reali.
+        </p>
+    </div>
+</body>
+</html>

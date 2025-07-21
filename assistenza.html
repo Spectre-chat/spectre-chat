@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistenza - Spectre</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="modal-container"></div>
+    <div class="page-container">
+        <h1 class="glitch" data-text="ASSISTENZA">ASSISTENZA</h1>
+        <p>Invia un ticket sicuro all'amministrazione. La tua richiesta verrà processata nel minor tempo possibile.</p>
+        <form id="assistenza-form">
+            <input type="text" id="ticket-codename" placeholder="IL TUO CODENAME (OPZIONALE)" autocomplete="off">
+            <textarea id="ticket-message" placeholder="DESCRIZIONE DEL PROBLEMA..." rows="5" required style="text-transform: none; text-align: left;"></textarea>
+            <button type="submit">INVIA TICKET</button>
+        </form>
+    </div>
+    <script src="client.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('assistenza-form');
+            const codenameInput = document.getElementById('ticket-codename');
+            const messageInput = document.getElementById('ticket-message');
+            
+            const supportSocket = new WebSocket('ws://localhost:3000?support=true');
+
+            supportSocket.onopen = () => {
+                console.log("Connessione di assistenza stabilita.");
+            };
+
+            supportSocket.onerror = () => {
+                showModal("ERRORE DI RETE", "Impossibile connettersi al server di assistenza. Riprova più tardi.", true);
+            };
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                if (supportSocket.readyState !== WebSocket.OPEN) {
+                    showModal("ERRORE", "Nessuna connessione al server. Impossibile inviare il ticket.", true);
+                    return;
+                }
+
+                const ticket = {
+                    type: 'NEW_TICKET',
+                    payload: {
+                        codename: codenameInput.value.trim(),
+                        message: messageInput.value.trim(),
+                        timestamp: new Date().toISOString()
+                    }
+                };
+
+                supportSocket.send(JSON.stringify(ticket));
+
+                const ticketId = `TICKET-${Date.now()}`;
+                showModal("TICKET INVIATO", `La tua richiesta è stata ricevuta con successo. Il tuo ID ticket è: <strong>${ticketId}</strong>.`, false);
+                form.reset();
+            });
+        });
+    </script>
+</body>
+</html>

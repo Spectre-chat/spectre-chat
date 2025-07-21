@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolli di Sicurezza - Spectre</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* Rimuoviamo il contenitore fisso e applichiamo lo stile direttamente al body */
+        body {
+            height: auto; /* Permette al corpo della pagina di crescere */
+            min-height: 100vh;
+            overflow-y: auto; /* Abilita lo scorrimento verticale */
+            padding: 40px;
+            display: block; /* Togliamo il flexbox center */
+        }
+        .protocol-container {
+            max-width: 900px;
+            margin: 0 auto; /* Centra il contenuto */
+            border: 2px solid var(--border-color);
+            background: var(--background-color);
+            box-shadow: 0 0 25px rgba(0, 255, 171, 0.2);
+            padding: 40px;
+        }
+        .protocol-content {
+            text-align: left;
+        }
+        .protocol-content h2 {
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 30px;
+            font-size: 1.8em;
+        }
+        .protocol-content p {
+            color: #ccc;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .protocol-content strong {
+            color: var(--primary-color);
+        }
+        .protocol-content code {
+            background: #222;
+            padding: 2px 6px;
+            color: var(--secondary-color);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="protocol-container">
+        <h1 class="glitch" data-text="PROTOCOLLI">PROTOCOLLI</h1>
+        <div class="protocol-content">
+            <h2>> CLASSIFICAZIONE: TOP SECRET // FOR ADMIN EYES ONLY</h2>
+            <p>Questo documento delinea i protocolli operativi di sicurezza implementati nel sistema <strong>Spectre</strong>. La stretta aderenza a questi principi è obbligatoria per tutti gli operatori. La violazione comporterà la terminazione immediata dell'accesso.</p>
+
+            <h2>> PRINCIPIO DI ANONIMATO ASSOLUTO</h2>
+            <p>Il sistema è progettato per operare in modalità <strong>Zero-Knowledge</strong> riguardo l'identità degli utenti. Non vengono richiesti, processati o memorizzati dati di identificazione personale (PII).
+            <br>- <strong>Nessun Account:</strong> L'accesso non è basato su registrazioni.
+            <br>- <strong>Nessuna Email o Telefono:</strong> Il sistema non ha modo di contattarti.
+            <br>- <strong>Nessun Cookie di Tracciamento:</strong> L'unica informazione locale è un flag di sessione per il disclaimer.
+            <br>L'identità di un operatore è limitata a un <code>codename</code> generato casualmente ad ogni connessione, garantendo la non-attribuzione delle sessioni.</p>
+
+            <h2>> ACCESSO CRIPTATO TRAMITE CODICI UNICI</h2>
+            <p>L'accesso ai canali di comunicazione è possibile <strong>solo ed esclusivamente</strong> tramite un codice canale valido, generato dall'amministrazione. Ogni codice è una chiave di accesso univoca a un'istanza di chat isolata. Non è possibile creare o accedere a canali in altro modo. Questo previene accessi non autorizzati e attacchi di tipo "brute-force", ulteriormente mitigati da un sistema di blocco progressivo degli IP che tentano accessi falliti.</p>
+
+            <h2>> PRINCIPIO DI VOLATILITÀ DEI DATI (RAM-ONLY)</h2>
+            <p><strong>Nessun dato viene conservato in modo permanente su disco.</strong> Tutte le conversazioni, le liste di utenti e i codici canale attivi risiedono esclusivamente nella <strong>memoria volatile (RAM)</strong> del server. Questo è un principio fondamentale del design di Spectre. Al riavvio, al crash o allo spegnimento del server, ogni traccia di attività viene irrimediabilmente e istantaneamente cancellata, senza possibilità di recupero forense.</p>
+
+            <h2>> MESSAGGI EFFIMERI CON AUTODISTRUZIONE</h2>
+            <p>Tutti i messaggi sono progettati per essere effimeri, limitando la finestra di esposizione delle informazioni.
+            <br>- I messaggi degli operatori si autodistruggono dalla visualizzazione del client dopo <strong>15 secondi</strong>.
+            <br>- I messaggi dell'amministrazione e i broadcast, data la loro importanza, persistono per <strong>60 secondi</strong>.
+            <br>Questo protocollo garantisce che anche se un dispositivo venisse fisicamente compromesso, la cronologia delle conversazioni recuperabile sarebbe minima o del tutto inesistente.</p>
+            
+            <h2>> PROTOCOLLO "SCORCHED EARTH"</h2>
+            <p>In caso di emergenza estrema, l'amministrazione può attivare il protocollo di autodistruzione. Questa azione non è un semplice spegnimento. Inizia una catena di eventi irreversibile:
+            <br>1. Il server invia un comando di terminazione a tutti i client connessi.
+            <br>2. Tutti i browser vengono forzatamente reindirizzati a una pagina di <strong>blackout</strong>, un vicolo cieco digitale.
+            <br>3. Il processo del server viene terminato, cancellando istantaneamente ogni dato dalla memoria RAM.
+            <br><strong>La procedura è definitiva e non lascia tracce.</strong></p>
+        </div>
+    </div>
+</body>
+</html>

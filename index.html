@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spectre</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="modal-container"></div>
+    <div id="app-container">
+        <div id="access-screen">
+            <h1 class="glitch" data-text="SPECTRE">SPECTRE</h1>
+            <p id="login_prompt"></p>
+            <form id="channel-form">
+                <input type="text" id="channel-input" data-lang="login_placeholder" required autocomplete="off">
+                <button type="submit" data-lang="login_button"></button>
+            </form>
+            <div class="footer-links">
+                <a href="/protocolli.html" target="_blank" data-lang="security_protocols"></a>
+                <a href="/admin.html" class="admin-link" data-lang="admin_access"></a>
+            </div>
+        </div>
+        <div id="chat-screen" class="hidden">
+            <div id="chat-header">
+                <span id="channel-display"></span>
+                <span id="codename-display"></span>
+                <span id="chat-info-btn">i</span>
+            </div>
+            <div id="chat-window"><div id="messages"></div></div>
+            <form id="message-form">
+                <input type="text" id="message-input" data-lang="chat_placeholder" required autocomplete="off">
+                <button type="submit" data-lang="chat_send_button"></button>
+            </form>
+        </div>
+    </div>
+    <script src="client.js"></script>
+    <script src="languages.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lang = (navigator.language || navigator.userLanguage).split('-')[0];
+            const t = languages[lang] || languages.it;
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.dataset.lang;
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') { el.placeholder = t[key]; } 
+                else { el.textContent = t[key]; }
+            });
+            document.getElementById('login_prompt').textContent = t.login_prompt;
+
+            const accessScreen=document.getElementById('access-screen'),chatScreen=document.getElementById('chat-screen'),channelForm=document.getElementById('channel-form'),messageForm=document.getElementById('message-form'),channelInput=document.getElementById('channel-input'),messageInput=document.getElementById('message-input'),messagesContainer=document.getElementById('messages'),channelDisplay=document.getElementById('channel-display'),codenameDisplay=document.getElementById('codename-display'),chatInfoBtn=document.getElementById('chat-info-btn');
+            let myCodename='', socket;
+            
+            function showDisclaimer() {
+                const modal = showModal(t.modal_disclaimer_title, t.modal_disclaimer_msg, false, () => {
+                    window.open('/assistenza.html', '_blank');
+                });
+                const closeBtn = modal.querySelector('.modal-buttons button[id^="close-"]');
+                const confirmBtn = modal.querySelector('.confirm-btn');
+                if (closeBtn && !confirmBtn) { closeBtn.textContent = t.modal_disclaimer_accept_btn; } 
+                else if (closeBtn && confirmBtn) { closeBtn.textContent = "ACCETTO"; confirmBtn.textContent = "ASSISTENZA"; confirmBtn.classList.remove('confirm-btn'); }
+            }
+            
+            function displayMessage(data, isHistory=false){const el=document.createElement('div');el.classList.add('message');if(data.codename===myCodename)el.classList.add('my-message');else if(data.codename==='[ADMIN]')el.classList.add('admin-message');else if(data.codename==='[BROADCAST]')el.classList.add('broadcast-message');else el.classList.add('other-message');const timestamp=new Date(data.timestamp).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});el.innerHTML=`<span class="codename">${escapeHTML(data.codename)}</span> ${escapeHTML(data.text)} <span class="timestamp">${timestamp}</span>`;messagesContainer.appendChild(el);if(!isHistory){messagesContainer.parentElement.scrollTop=messagesContainer.parentElement.scrollHeight;const duration=(data.codename==='[ADMIN]'||data.codename==='[BROADCAST]')?60000:15000;setTimeout(()=>{el.classList.add('disappearing');setTimeout(()=>el.remove(),500)},duration)}}
+            
+            function connectToChannel(channelName){
+                // MODIFICATO: Per funzionare online
+                const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                const host = window.location.host;
+                socket = new WebSocket(`${wsProtocol}//${host}?channel=${channelName}`);
+
+                socket.onmessage=event=>{
+                    const data=JSON.parse(event.data);
+                    if(data.type==='system_shutdown'){window.location.href='/blackout.html';return;}
+                    if(data.type==='channel_deleted'){showModal(t.modal_channel_terminated_title,t.modal_channel_terminated_msg,true);socket.close();setTimeout(()=>window.location.reload(),3000);return}
+                    if(data.type==='chat_history'){
+                        myCodename=data.payload.codename;
+                        accessScreen.classList.add('hidden');chatScreen.classList.remove('hidden');
+                        channelDisplay.textContent=`${t.chat_header_channel}: ${channelName.substring(0,15)}...`;
+                        codenameDisplay.textContent=`${t.chat_header_codename}: ${myCodename}`;
+                        messagesContainer.innerHTML='';
+                        data.payload.messages.forEach(msg=>displayMessage(msg,true));
+                        messagesContainer.parentElement.scrollTop=messagesContainer.parentElement.scrollHeight;
+                        messageInput.focus();
+                        if(sessionStorage.getItem(`disclaimer_shown_${channelName}`)!=='true'){showDisclaimer();sessionStorage.setItem(`disclaimer_shown_${channelName}`,'true')}
+                    }else{displayMessage(data)}
+                };
+                socket.onclose=event=>{
+                    if(chatScreen.classList.contains('hidden')){showModal(t.modal_login_failed_title,event.reason||t.modal_login_failed_msg)}
+                    else{const systemMsg=document.createElement('div');systemMsg.className='system-message error';systemMsg.textContent='[System]: SEGNALE PERSO. CONNESSIONE INTERROTTA.';messagesContainer.appendChild(systemMsg)}
+                }
+            }
+            
+            channelForm.addEventListener('submit',e=>{e.preventDefault();const channelName=channelInput.value.trim();if(channelName)connectToChannel(channelName);else showModal(t.modal_error_input_title,t.modal_error_input_msg)});
+            messageForm.addEventListener('submit',e=>{e.preventDefault();const text=messageInput.value.trim();if(text&&socket?.readyState===WebSocket.OPEN){const messageData={codename:myCodename,text,timestamp:new Date().toISOString()};socket.send(JSON.stringify(messageData));displayMessage(messageData);messageInput.value=''}});
+            chatInfoBtn.addEventListener('click',showDisclaimer);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Spectre</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="modal-container"></div>
+    <div id="admin-login-screen">
+        <h1 class="glitch" data-text="ACCESSO RISERVATO">ACCESSO RISERVATO</h1>
+        <form id="admin-login-form"><input type="password" id="admin-password" placeholder="CHIAVE DI ACCESSO" required><button type="submit">AUTENTICA</button></form>
+    </div>
+    <div id="admin-dashboard" class="hidden">
+        <div id="dashboard-main-grid">
+            <div id="left-panel">
+                <div id="dashboard-header"><h1>CENTRO COMANDO</h1><span id="notification-bell">🔔<span id="notification-count" class="hidden">0</span></span></div>
+                <div class="dashboard-grid-top">
+                    <div class="dashboard-widget"><h2>UTENTI ONLINE</h2><p id="online-users-count">--</p></div>
+                    <div class="dashboard-widget"><h2>CANALI VALIDI</h2><p id="valid-channels-count">--</p></div>
+                </div>
+                <div class="dashboard-widget"><button id="create-channel-btn">GENERA NUOVO CODICE</button></div>
+                <div class="dashboard-widget"><button id="advanced-mode-btn">SALA OPERATIVA</button></div>
+                <div id="channel-list-container"><h2>CANALI ATTIVI (<span id="active-channels-count">0</span>)</h2><div id="channel-list"></div></div>
+                <div class="dashboard-widget emergency"><button id="self-destruct-btn">ATTIVA SCORCHED EARTH</button></div>
+            </div>
+            <div id="right-panel">
+                <div id="chat-viewer">
+                    <div id="chat-viewer-header">
+                        <span id="chat-viewer-title">Seleziona un canale per visualizzare i messaggi</span>
+                        <span id="delete-channel-btn" class="hidden icon-btn">🗑️</span>
+                    </div>
+                    <div id="chat-viewer-messages"></div>
+                    <form id="admin-reply-form" class="hidden"><input type="text" id="admin-reply-input" placeholder="Rispondi come [ADMIN]..."><button type="submit">>></button></form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="advanced-dashboard-overlay">
+        <div id="advanced-dashboard-header">
+            <h2 class="glitch" data-text="SALA OPERATIVA">SALA OPERATIVA</h2>
+            <span id="close-advanced-dashboard">×</span>
+        </div>
+        <div id="advanced-dashboard-grid">
+            <div class="advanced-widget">
+                <h3>KEYLOGGER ETICO <span class="info-icon" data-info="interceptor">i</span></h3>
+                <div id="packet-interceptor-content" class="advanced-widget-content log-viewer"></div>
+            </div>
+            <div class="advanced-widget">
+                <h3>PROTOCOLLO ESPULSIONE <span class="info-icon" data-info="banishment">i</span></h3>
+                <div id="banishment-protocol-content" class="advanced-widget-content"></div>
+            </div>
+             <div class="advanced-widget">
+                <h3>GESTIONE BAN <span class="info-icon" data-info="unban">i</span></h3>
+                <div id="unban-list" class="advanced-widget-content"></div>
+            </div>
+            <div class="advanced-widget">
+                <h3>TERMINALE ASSISTENZA <span class="info-icon" data-info="support">i</span></h3>
+                <div id="support-tickets-content" class="advanced-widget-content log-viewer"></div>
+            </div>
+        </div>
+    </div>
+    <div id="destruct-overlay" class="hidden"><h1>AUTODISTRUZIONE IN CORSO</h1><div id="countdown">10</div><button id="cancel-destruct-btn">ANNULLA</button></div>
+    <script src="client.js"></script>
+    <script src="languages.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
